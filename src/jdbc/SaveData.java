@@ -17,7 +17,12 @@ public class SaveData {
 
         Session session = factory.getCurrentSession();
 
+        try{
+            Book book = new Book(1234, "aaa1", "agsdfg", "Available", 1, 3);
 
+            session.beginTransaction();
+
+            session.save(book);
 
             session.getTransaction().commit();
 
