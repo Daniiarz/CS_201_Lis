@@ -28,12 +28,13 @@ public class UserDriver {
             List<Book> books = session.createQuery("from Book").list();
             Set<Book> bookSet = new HashSet<>(books);
 
-            User user = new User("daniyarflash.m01@gmail.com", "Daniiar Mukash uulu", "0777954456", "Student");
+            User user = new User("a@a.com", "Daniiar Mukash uulu", "0777954456", "Student", 1);
             user.setBooks(bookSet);
-            user.setPassword("Cool Pass");
+            user.setPassword("1234");
             session.persist(user);
 
             session.getTransaction().commit();
+            session.close();
         }
         catch (Exception e){
             e.printStackTrace();

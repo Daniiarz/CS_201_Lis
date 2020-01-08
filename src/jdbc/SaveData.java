@@ -18,23 +18,13 @@ public class SaveData {
         Session session = factory.getCurrentSession();
 
         try{
-            Book book = new Book(1234, "aaa1", "agsdfg", "Available", 1, 3);
-
             session.beginTransaction();
+
+
+            Book book = new Book(1234, "aaa1", "kghjfgh", "Available", 1, 3);
+
 
             session.save(book);
-
-            session.getTransaction().commit();
-
-            System.out.println("Saved book");
-            System.out.println(book);
-
-            session = factory.getCurrentSession();
-            session.beginTransaction();
-
-            Book myBook = session.get(Book.class, 1);
-
-            System.out.println("Get complete " + myBook);
 
             session.getTransaction().commit();
 

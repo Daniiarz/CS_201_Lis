@@ -1,6 +1,4 @@
 package Entities;
-import jdbc.GeneralDBMethods;
-import org.hibernate.Session;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import javax.persistence.*;
@@ -9,9 +7,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
-public class User implements SaveAndDelete {
+public class User {
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(
             name = "User_Book",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -20,13 +18,16 @@ public class User implements SaveAndDelete {
     Set<Book> books = new HashSet<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    private boolean is_active;
+    @Column(name = "is_active")
+    private int is_active;
+
+    private String user_active;
 
     private String name;
 
@@ -40,9 +41,10 @@ public class User implements SaveAndDelete {
     public User() {
     }
 
-    public User(String email, String name, String phone_num, String type) {
+    public User(String email, String name, String phone_num, String type, int is_active) {
+        this.user_active = "Active";
         this.email = email;
-        this.is_active = true;
+        this.is_active = is_active;
         this.name = name;
         this.phone_num = phone_num;
         this.type = type;
@@ -60,12 +62,18 @@ public class User implements SaveAndDelete {
         this.books = books;
     }
 
-    public boolean isIs_active() {
+    public int getIs_Active() {
         return is_active;
     }
 
-    public void setIs_active(boolean is_active) {
+    public void setIs_active(int is_active) {
         this.is_active = is_active;
+        if (is_active == 0){
+            user_active = "Deactivated";
+        }
+        else {
+            user_active = "Active";
+        }
     }
 
     public String getName() {
@@ -105,33 +113,15 @@ public class User implements SaveAndDelete {
         this.password = pbkdf2PasswordEncoder.encode(password);
     }
 
-
-    public void delete(){
-        Session session = GeneralDBMethods.get_session();
-
-        try {
-            session.beginTransaction();
-
-            session.delete(this);
-
-            session.getTransaction().commit();
-        }
-        finally {
-            System.out.println("User deleted");
-        }
+    public String getPassword() {
+        return password;
     }
 
+    public String getUser_active() {
+        return user_active;
+    }
 
-    public void save(){
-        Session session = GeneralDBMethods.get_session();
-
-        try {
-            session.beginTransaction();
-
-            session.save(this);
-        }
-        finally {
-            System.out.println("User saved");
-        }
+    public void setUser_active(String user_active) {
+        this.user_active = user_active;
     }
 }

@@ -1,16 +1,19 @@
 package jdbc;
 
 import Entities.Book;
+import Entities.Librarian;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ReadData {
+public class LibrarianDriver {
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args){
+
         SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Book.class)
+                .addAnnotatedClass(Librarian.class)
                 .buildSessionFactory();
 
         Session session = factory.getCurrentSession();
@@ -18,16 +21,18 @@ public class ReadData {
         try{
             session.beginTransaction();
 
-            Book myBook = session.get(Book.class, 1);
 
-            System.out.println("Get complete " + myBook);
+            Librarian librarian = new Librarian("li@li.com", "li", "131");
+            librarian.setPassword("12345");
+
+            session.save(librarian);
 
             session.getTransaction().commit();
-
 
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
+
 }

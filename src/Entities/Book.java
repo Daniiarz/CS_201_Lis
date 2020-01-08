@@ -1,22 +1,15 @@
 package Entities;
 
-import jdbc.GeneralDBMethods;
-import org.hibernate.Session;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name="books")
-public class Book implements SaveAndDelete{
+@Table(name = "books")
+public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "book_id")
     private int book_id;
-
-    @ManyToOne
-    @JoinColumn(name="genre_id", nullable=false)
-    private Genre genre;
 
     @Column(name = "isbn")
     private int ISBN;
@@ -36,7 +29,7 @@ public class Book implements SaveAndDelete{
     @Column(name = "booksAmount")
     private int BooksAmount;
 
-    public Book(){
+    public Book() {
 
     }
 
@@ -46,7 +39,7 @@ public class Book implements SaveAndDelete{
         this.name = name;
         this.status = status;
         this.edition = edition;
-        BooksAmount = booksAmount;
+        this.BooksAmount = booksAmount;
     }
 
     public int getBooksAmount() {
@@ -89,59 +82,29 @@ public class Book implements SaveAndDelete{
         this.author = author;
     }
 
-    public int getISBN() {
-        return ISBN;
+    public String getISBN() {
+        return Integer.toString(ISBN);
     }
 
     public void setISBN(int ISBN) {
         this.ISBN = ISBN;
     }
 
-
-    @Override
-    public String toString() {
-        return String.format("Book %s, %s", getISBN(), getName());
-    }
-
     public int getId() {
         return book_id;
     }
 
-    public Genre getGenre() {
-        return genre;
+    @Override
+    public String toString() {
+        return String.format("%s, %s, %s edition", getName(), getAuthor(), getEdition());
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public void delete(){
-        Session session = GeneralDBMethods.get_session();
-
-        try {
-            session.beginTransaction();
-
-            session.delete(this);
-
-            session.getTransaction().commit();
-        }
-        finally {
-            System.out.println("Book Deleted");
+    public void reduce_amount() {
+        if (getBooksAmount() == 1) {
+            setBooksAmount(0);
+            setStatus("Unavailable");
+        } else {
+            setBooksAmount(getBooksAmount() - 1);
         }
     }
-
-
-    public void save(){
-        Session session = GeneralDBMethods.get_session();
-
-        try {
-            session.beginTransaction();
-
-            session.save(this);
-        }
-        finally {
-            System.out.println("Book saved");
-        }
-    }
-
 }

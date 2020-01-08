@@ -8,6 +8,8 @@
 
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
+        <!-- Your settings -->
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/library_db</property>
         <property name="hibernate.connection.username">daniiar</property>
         <property name="hibernate.connection.password">SSpass123</property>
