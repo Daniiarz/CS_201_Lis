@@ -135,9 +135,9 @@ public class Users {
 
                     try {
                         session.beginTransaction();
-
+                        // Getting user insatnce from db
                         User myUser = session.get(User.class, user.getUser_id());
-
+                        // Setting user's user_active field to 0
                         myUser.setIs_active(0);
 
                         session.getTransaction().commit();
@@ -146,6 +146,7 @@ public class Users {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     } finally {
+                        // Showing updated user in table
                         booksTable.getItems().setAll(get_all_users(searchByName.getText()));
                     }
                 }

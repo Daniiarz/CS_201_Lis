@@ -71,7 +71,7 @@ public class Profile {
             Librarian librarian = GUI.Session.librarian;
 
             Alert alert;
-
+            // Validating Fields
             if (nameField.getText().equals("") || phoneNUmberField.getText().equals("") || emailField.getText().equals("")) {
                 raise_error();
             } else {
@@ -87,11 +87,11 @@ public class Profile {
                     session.beginTransaction();
 
                     Librarian myLibrarian = session.get(Librarian.class, librarian.getId());
-
+                    // Updating Librarian
                     myLibrarian.setEmail(emailField.getText());
                     myLibrarian.setEmail(nameField.getText());
                     myLibrarian.setEmail(phoneNUmberField.getText());
-
+                    // If password is not empty set new password
                     if (!passField.getText().equals("")){
                         myLibrarian.setPassword(passField.getText());
                     }
